@@ -1,0 +1,4561 @@
+---
+swagger: "2.0"
+info:
+  description: "Recursos disponiveis para o aplicativo Smart POS"
+  version: "1.0.0"
+  title: "Linx Postos SmartPOS"
+host: "postoshub.linx.com.br"
+basePath: "/api"
+schemes:
+- "https"
+paths:
+  /v1/auth/partner/:
+    post:
+      tags:
+      - "Auth"
+      summary: "Login do parceiro"
+      description: "Realiza o login do parceiro"
+      operationId: "services.auth.web.post_auth_partner"
+      parameters:
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do parceiro"
+        required: false
+        schema:
+          $ref: "#/definitions/data"
+      responses:
+        "200":
+          description: "Login foi bem sucedido"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+        "400":
+          description: "Requisição com sintaxe inválida"
+          schema:
+            $ref: "#/definitions/Error"
+        "401":
+          description: "Recurso solicitado requer autenticação"
+          schema:
+            $ref: "#/definitions/Error"
+        "403":
+          description: "Sem permissão para acesso ao conteúdo"
+          schema:
+            $ref: "#/definitions/Error"
+        "404":
+          description: "Recurso solicitado não encontrado"
+          schema:
+            $ref: "#/definitions/Error"
+        "405":
+          description: "Método da requisição não permitido"
+          schema:
+            $ref: "#/definitions/Error"
+        "409":
+          description: "Existe uma sessão já iniciada ou conflitante com a tentativa\
+            \ corrente"
+          schema:
+            $ref: "#/definitions/Error"
+        "415":
+          description: "Formato do conteúdo de dados não suportado"
+          schema:
+            $ref: "#/definitions/Error"
+        "500":
+          description: "Erro interno no servidor"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Auth"
+  /v1/user/login/:
+    post:
+      tags:
+      - "User"
+      summary: "Login do usuário"
+      description: "Realiza o login do usuário no backoffice"
+      operationId: "services.user.web.post_user_login"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do usuário"
+        required: false
+        schema:
+          $ref: "#/definitions/data_1"
+      responses:
+        "200":
+          description: "Login foi bem sucedido"
+          schema:
+            $ref: "#/definitions/inline_response_200_1"
+      x-swagger-router-controller: "User"
+  /v1/user/logout/:
+    post:
+      tags:
+      - "User"
+      summary: "Logout do usuário"
+      description: "Realiza o logout do usuário no backoffice"
+      operationId: "services.user.web.post_user_logout"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      responses:
+        "200":
+          description: "Logout foi bem sucedido"
+      x-swagger-router-controller: "User"
+  /v1/user/permission/:
+    get:
+      tags:
+      - "User"
+      summary: "Permissões do usuário"
+      description: "Realiza a consulta de permissões do usuário no backoffice"
+      operationId: "services.user.web.get_user_permission"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "username"
+        in: "query"
+        description: "Nome do usuário"
+        required: false
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "Senha de acesso do usuário"
+        required: false
+        type: "string"
+      - name: "rfid"
+        in: "query"
+        description: "Cartão RFID do usuário"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Consulta foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_2"
+      x-swagger-router-controller: "User"
+  /v1/cash/shift/:
+    get:
+      tags:
+      - "Cash"
+      summary: "Consulta de turno"
+      description: "Realiza a consulta do último turno aberto/fechado do caixa"
+      operationId: "services.cash.web.get_cash_shift"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "username"
+        in: "query"
+        description: "Nome do usuário"
+        required: false
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "Senha de acesso do usuário"
+        required: false
+        type: "string"
+      - name: "rfid"
+        in: "query"
+        description: "Cartão RFID do usuário"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Consulta de turno foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_3"
+      x-swagger-router-controller: "Cash"
+    post:
+      tags:
+      - "Cash"
+      summary: "Abertura de turno"
+      description: "Realiza a abertura de turno do caixa"
+      operationId: "services.cash.web.post_cash_shift"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados da abertura de turno"
+        required: false
+        schema:
+          $ref: "#/definitions/data_3"
+      responses:
+        "200":
+          description: "Abertura de turno foi bem sucedida"
+      x-swagger-router-controller: "Cash"
+    put:
+      tags:
+      - "Cash"
+      summary: "Fechamento de turno"
+      description: "Realiza o fechamento de turno do caixa"
+      operationId: "services.cash.web.put_cash_shift"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do fechamento de turno"
+        required: false
+        schema:
+          $ref: "#/definitions/data_2"
+      responses:
+        "200":
+          description: "Fechamento de turno foi bem sucedido"
+          schema:
+            $ref: "#/definitions/inline_response_200_4"
+      x-swagger-router-controller: "Cash"
+  /v1/cash/supply/:
+    post:
+      tags:
+      - "Cash"
+      summary: "Suprimento de caixa"
+      description: "Realiza um suprimento de caixa em dinheiro"
+      operationId: "services.cash.web.post_cash_supply"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do suprimento"
+        required: false
+        schema:
+          $ref: "#/definitions/data_4"
+      responses:
+        "200":
+          description: "Suprimento foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_5"
+      x-swagger-router-controller: "Cash"
+  /v1/cash/withdrawal/:
+    post:
+      tags:
+      - "Cash"
+      summary: "Sangria de caixa"
+      description: "Realiza uma sangria de caixa em dinheiro"
+      operationId: "services.cash.web.post_cash_withdrawal"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados da sangria"
+        required: false
+        schema:
+          $ref: "#/definitions/data_5"
+      responses:
+        "200":
+          description: "Sangria foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_6"
+      x-swagger-router-controller: "Cash"
+  /v1/customer/:
+    get:
+      tags:
+      - "Customer"
+      summary: "Consulta de clientes"
+      description: "Realiza a consulta de clientes"
+      operationId: "services.customer.web.get_customer"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "search"
+        in: "query"
+        description: "Valor de pesquisa (ID, código, nome, apelido, CPF, CNPJ, RFID\
+          \ do cliente, placa do veículo, ID ou CPF do motorista, cartão fidelidade)"
+        required: false
+        type: "string"
+      - name: "field"
+        in: "query"
+        description: "Campo de pesquisa (id, code, name, nickname, cpf, rfid, plate,\
+          \ loyaltyCard)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Número da página (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Limite de registros (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Consulta de clientes foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_7"
+      x-swagger-router-controller: "Customer"
+  /v1/customer/credit/:
+    get:
+      tags:
+      - "Customer"
+      summary: "Consulta de restrição de crédito do cliente"
+      description: "Realiza a consulta de restrição de crédito do cliente"
+      operationId: "services.customer.web.get_customer_credit"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "search"
+        in: "query"
+        description: "Valor de pesquisa (ID, código, nome, apelido, CPF, CNPJ do cliente,\
+          \ placa do veículo)"
+        required: false
+        type: "string"
+      - name: "paymentId"
+        in: "query"
+        description: "Id da forma de pagamento (Consulta a restrição de uma determinada\
+          \ forma de pagamento)"
+        required: false
+        type: "integer"
+      - name: "username"
+        in: "query"
+        description: "Nome do usuário com permissão para realizar a consulta de cré\
+          dito completa"
+        required: false
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "Senha de acesso do usuário com permissão para realizar a consulta\
+          \ de crédito completa"
+        required: false
+        type: "string"
+      - name: "rfid"
+        in: "query"
+        description: "Cartão RFID do usuário"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Constulta de restrição de crédito foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_8"
+      x-swagger-router-controller: "Customer"
+  /v1/customer/{customerId}/driver/:
+    get:
+      tags:
+      - "Customer"
+      summary: "Consulta de motoristas do cliente"
+      description: "Realiza a consulta de motoristas do cliente"
+      operationId: "services.customer.web.get_customer_driver"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "customerId"
+        in: "path"
+        description: "Id do cliente"
+        required: true
+        type: "integer"
+      - name: "search"
+        in: "query"
+        description: "Pesquisa pelo nome do motorista"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Consulta de motoristas do cliente foi bem sucedida"
+          schema:
+            type: "array"
+            description: "Lista de motoristas"
+            items:
+              $ref: "#/definitions/inline_response_200_9"
+      x-swagger-router-controller: "Customer"
+  /v1/customer/{customerId}/fleet/:
+    get:
+      tags:
+      - "Customer"
+      summary: "Consulta de veículos da frota do cliente"
+      description: "Realiza a consulta de veículos da frota do cliente"
+      operationId: "services.customer.web.get_customer_fleet"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "customerId"
+        in: "path"
+        description: "Id do cliente"
+        required: true
+        type: "integer"
+      - name: "search"
+        in: "query"
+        description: "Pesquisa pela placa do veículo"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Consulta de veículos da frota do cliente foi bem sucedida"
+          schema:
+            type: "array"
+            description: "Lista de veículos da frota"
+            items:
+              $ref: "#/definitions/inline_response_200_10"
+      x-swagger-router-controller: "Customer"
+  /v1/device/log/:
+    post:
+      tags:
+      - "Device"
+      summary: "Envia o arquivo de log"
+      description: "Realiza o envio do arquivo de log das operações do dispositivo"
+      operationId: "services.device.web.post_device_log"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do arquivo de log"
+        required: false
+        schema:
+          $ref: "#/definitions/data_6"
+      responses:
+        "200":
+          description: "Recebimento do arquivo de log foi bem sucedido"
+      x-swagger-router-controller: "Device"
+  /v1/employee/:
+    get:
+      tags:
+      - "Employee"
+      summary: "Consulta de funcionários"
+      description: "Realiza a consulta de funcionários"
+      operationId: "services.employee.web.get_employee"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "search"
+        in: "query"
+        description: "Valor de pesquisa (ID, código, nome, apelido, CPF, RFID do funcioná\
+          rio)"
+        required: false
+        type: "string"
+      - name: "field"
+        in: "query"
+        description: "Campo de pesquisa (id, code, name, nickname, cpf, rfid)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Número da página (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Limite de registros (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Consulta de funcionários foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_11"
+      x-swagger-router-controller: "Employee"
+  /v1/fuelpump/:
+    get:
+      tags:
+      - "Fuelpump"
+      summary: "Consulta dos bicos de abastecimento"
+      description: "Realiza a consulta dos bicos de abastecimento"
+      operationId: "services.fuelpump.web.get_fuelpump"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      responses:
+        "200":
+          description: "Consulta dos bicos de abastecimento foi bem sucedida"
+          schema:
+            type: "array"
+            description: "Lista dos bicos de abastecimento"
+            items:
+              $ref: "#/definitions/inline_response_200_12"
+      x-swagger-router-controller: "Fuelpump"
+  /v1/fuelpump/fuelling/:
+    get:
+      tags:
+      - "Fuelpump"
+      summary: "Consulta dos abastecimentos de todos os bicos"
+      description: "Realiza a consulta dos abastecimentos de todos os bicos"
+      operationId: "services.fuelpump.web.get_fuelpump_fuelling"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "username"
+        in: "query"
+        description: "Nome do usuário"
+        required: false
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "Senha de acesso do usuário"
+        required: false
+        type: "string"
+      - name: "rfid"
+        in: "query"
+        description: "Cartão RFID do usuário"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Número da página (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Limite de registros (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Consulta de abastecimentos foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_13"
+      x-swagger-router-controller: "Fuelpump"
+  /v1/fuelpump/{fuelPumpId}/fuelling/:
+    get:
+      tags:
+      - "Fuelpump"
+      summary: "Consulta dos abastecimentos de um bico"
+      description: "Realiza a consulta dos abastecimentos de um bico"
+      operationId: "services.fuelpump.web.get_fuelpump_fuelling_by_id"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "fuelPumpId"
+        in: "path"
+        description: "Número do bico de abastecimento"
+        required: true
+        type: "integer"
+      - name: "username"
+        in: "query"
+        description: "Nome do usuário"
+        required: false
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "Senha de acesso do usuário"
+        required: false
+        type: "string"
+      - name: "rfid"
+        in: "query"
+        description: "Cartão RFID do usuário"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Número da página (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Limite de registros (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Consulta de abastecimentos do bico foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_14"
+      x-swagger-router-controller: "Fuelpump"
+  /v1/fuelpump/fuelling/{fuellingId}/order/:
+    post:
+      tags:
+      - "Fuelpump"
+      summary: "Reserva o abastecimento"
+      description: "Realiza a reserva (bloqueio) do abastecimento em uma nova pré\
+        -venda"
+      operationId: "services.fuelpump.web.post_fuelpump_fuelling_order"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "fuellingId"
+        in: "path"
+        description: "Id do abastecimento"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Reserva do abastecimento foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_15"
+      x-swagger-router-controller: "Fuelpump"
+  /v1/fuelpump/fuelling/{fuellingId}/order/{orderId}/:
+    post:
+      tags:
+      - "Fuelpump"
+      summary: "Reserva o abastecimento"
+      description: "Realiza a reserva (bloqueio) do abastecimento em uma pré-venda\
+        \ existente"
+      operationId: "services.fuelpump.web.post_fuelpump_fuelling_by_order"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "fuellingId"
+        in: "path"
+        description: "Id do abastecimento"
+        required: true
+        type: "integer"
+      - name: "orderId"
+        in: "path"
+        description: "Id da pré-venda"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Reserva do abastecimento foi bem sucedida"
+      x-swagger-router-controller: "Fuelpump"
+    delete:
+      tags:
+      - "Fuelpump"
+      summary: "Libera o abastecimento"
+      description: "Realiza a liberação (desbloqueio) do abastecimento que retona\
+        \ para pendência"
+      operationId: "services.fuelpump.web.delete_fuelpump_fuelling_by_order"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "fuellingId"
+        in: "path"
+        description: "Id do abastecimento"
+        required: true
+        type: "integer"
+      - name: "orderId"
+        in: "path"
+        description: "Id da pré-venda"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Liberação do abastecimento foi bem sucedida"
+      x-swagger-router-controller: "Fuelpump"
+  /v1/fuelpump/fuelling/order/{orderId}/:
+    delete:
+      tags:
+      - "Fuelpump"
+      summary: "Libera todos os abastecimentos"
+      description: "Realiza a liberação (desbloqueio) de todos abastecimentos de uma\
+        \ pré-venda"
+      operationId: "services.fuelpump.web.delete_fuelpump_fuelling_all_by_order"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "orderId"
+        in: "path"
+        description: "Id da pré-venda"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Liberação de todos os abastecimentos foi bem sucedida"
+      x-swagger-router-controller: "Fuelpump"
+  /v1/payment/:
+    get:
+      tags:
+      - "Payment"
+      summary: "Consulta das formas de pagamento"
+      description: "Realiza a consulta das formas de pagamento"
+      operationId: "services.payment.web.get_payment"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      responses:
+        "200":
+          description: "Consulta de formas de pagamento foi bem sucedida"
+          schema:
+            type: "array"
+            description: "Lista das formas de pagamento"
+            items:
+              $ref: "#/definitions/inline_response_200_16"
+      x-swagger-router-controller: "Payment"
+  /v1/product/:
+    get:
+      tags:
+      - "Product"
+      summary: "Consulta de produtos"
+      description: "Realiza a consulta de produtos"
+      operationId: "services.product.web.get_product"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "search"
+        in: "query"
+        description: "Valor de pesquisa (ID, código, código de barras, nome, nome\
+          \ resumido do produto)"
+        required: false
+        type: "string"
+      - name: "field"
+        in: "query"
+        description: "Campo de pesquisa (id, code, barcode, name, shortname)"
+        required: false
+        type: "string"
+      - name: "groupId"
+        in: "query"
+        description: "Id do grupo de produtos (Apenas para consulta de um determinado\
+          \ grupo de produtos)"
+        required: false
+        type: "integer"
+      - name: "page"
+        in: "query"
+        description: "Número da página (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "Limite de registros (Nulo para retornar todos registros)"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Consulta de produtos foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_17"
+      x-swagger-router-controller: "Product"
+  /v1/sale/:
+    get:
+      tags:
+      - "Sale"
+      summary: "Consulta de vendas"
+      description: "Realiza a consulta de vendas realizadas e canceladas no turno\
+        \ pelo dispositivo"
+      operationId: "services.sale.web.get_sale"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "username"
+        in: "query"
+        description: "Nome do usuário"
+        required: false
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "Senha de acesso do usuário"
+        required: false
+        type: "string"
+      - name: "rfid"
+        in: "query"
+        description: "Cartão RFID do usuário"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Consulta de vendas foi bem sucedida"
+          schema:
+            type: "array"
+            description: "Lista de vendas"
+            items:
+              $ref: "#/definitions/inline_response_200_21"
+      x-swagger-router-controller: "Sale"
+    post:
+      tags:
+      - "Sale"
+      summary: "Registro da venda"
+      description: "Realiza o registro da venda"
+      operationId: "services.sale.web.post_sale"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados da venda"
+        required: false
+        schema:
+          $ref: "#/definitions/data_8"
+      responses:
+        "200":
+          description: "Registro da venda foi bem sucedido"
+      x-swagger-router-controller: "Sale"
+  /v1/sale/checkout/:
+    post:
+      tags:
+      - "Sale"
+      summary: "Validação da venda"
+      description: "Realiza a validação da venda antes do registro"
+      operationId: "services.sale.web.post_sale_checkout"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados da venda"
+        required: true
+        schema:
+          $ref: "#/definitions/data_9"
+      responses:
+        "200":
+          description: "Validação da venda foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_22"
+      x-swagger-router-controller: "Sale"
+  /v1/sale/customer/:
+    post:
+      tags:
+      - "Sale"
+      summary: "Validação do cliente da venda"
+      description: "Realiza a validação do cliente da venda antes do checkout"
+      operationId: "services.sale.web.post_sale_customer"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do cliente da venda"
+        required: true
+        schema:
+          $ref: "#/definitions/data_10"
+      responses:
+        "200":
+          description: "Validação do cliente da venda foi bem sucedida"
+      x-swagger-router-controller: "Sale"
+  /v1/sale/item/:
+    post:
+      tags:
+      - "Sale"
+      summary: "Validação de item da venda"
+      description: "Realiza a validação de item da venda antes do checkout"
+      operationId: "services.sale.web.post_sale_item"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do item da venda"
+        required: true
+        schema:
+          $ref: "#/definitions/data_11"
+      responses:
+        "200":
+          description: "Validação do item da venda foi bem sucedida"
+      x-swagger-router-controller: "Sale"
+  /v1/sale/{saleId}/receipt/:
+    get:
+      tags:
+      - "Sale"
+      summary: "Solicitação do recibo fiscal"
+      description: "Realiza a solicitação do recibo fiscal"
+      operationId: "services.sale.web.get_sale_receipt"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "saleId"
+        in: "path"
+        description: "Id da venda (formato UUID4 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)"
+        required: true
+        type: "string"
+      - name: "layoutColumns"
+        in: "query"
+        description: "Quantidade de colunas para impressão dos comprovantes"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Solicitação do recibo fiscal foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_23"
+      x-swagger-router-controller: "Sale"
+  /v1/sale/{saleId}/cancel/:
+    post:
+      tags:
+      - "Sale"
+      summary: "Cancelamento da venda"
+      description: "Realiza o cancelamento da venda"
+      operationId: "services.sale.web.post_sale_cancel"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - name: "saleId"
+        in: "path"
+        description: "Id da venda"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "login"
+        required: false
+        schema:
+          $ref: "#/definitions/login"
+      responses:
+        "200":
+          description: "Cancelamento da venda foi bem sucedido"
+          schema:
+            $ref: "#/definitions/inline_response_200_24"
+      x-swagger-router-controller: "Sale"
+  /v1/sale/payment/:
+    post:
+      tags:
+      - "Sale"
+      summary: "Envia o pagamento da venda"
+      description: "Realiza o envio do pagamento da venda"
+      operationId: "services.sale.web.post_sale_payment"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "POS-Token"
+        in: "header"
+        description: "Token de autenticação gerado pelo backoffice"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      - in: "body"
+        name: "data"
+        description: "Dados do pagamento"
+        required: false
+        schema:
+          $ref: "#/definitions/data_12"
+      responses:
+        "200":
+          description: "Envio do pagamento foi bem sucedido"
+          schema:
+            $ref: "#/definitions/inline_response_200_25"
+      x-swagger-router-controller: "Sale"
+  /v1/setting/:
+    get:
+      tags:
+      - "Setting"
+      summary: "Configuração do backoffice"
+      description: "Consulta a configuração do backoffice"
+      operationId: "services.setting.web.get_setting"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "Token de autorização da API gerado pelo hub de serviços (Em\
+          \ rede local gerado pelo backoffice)"
+        required: true
+        type: "string"
+      - name: "Store-CNPJ"
+        in: "header"
+        description: "CNPJ da empresa (somente digitos)"
+        required: true
+        type: "string"
+      - name: "APK-Version"
+        in: "header"
+        description: "Número da versão do aplicativo"
+        required: false
+        type: "string"
+      - name: "Device-Number"
+        in: "header"
+        description: "Número serial do dispositivo"
+        required: true
+        type: "string"
+      - name: "RFID-Available"
+        in: "header"
+        description: "Indica se o dispositivo faz leitura de cartão RFID"
+        required: false
+        type: "boolean"
+      responses:
+        "200":
+          description: "Consulta da configuração foi bem sucedida"
+          schema:
+            $ref: "#/definitions/inline_response_200_26"
+      x-swagger-router-controller: "Setting"
+definitions:
+  Error:
+    type: "object"
+    properties:
+      detail:
+        type: "string"
+        description: "Descrição do erro"
+      status:
+        type: "integer"
+        description: "Status code do erro"
+      title:
+        type: "string"
+        description: "Título do erro"
+      type:
+        type: "string"
+        description: "Tipo do erro ocorrido"
+    description: "Dados do erro"
+  data:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        description: "Nome de usuário do parceiro"
+      password:
+        type: "string"
+        description: "Senha de acesso do parceiro"
+  inline_response_200:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+        description: "Token de acesso padrão JWT"
+      expiresIn:
+        type: "string"
+        description: "Tempo em milesegundos de validade do token"
+    example:
+      expiresIn: "expiresIn"
+      token: "token"
+  data_1:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        description: "Nome do usuário"
+      password:
+        type: "string"
+        description: "Senha de acesso do usuário"
+      rfid:
+        type: "string"
+        description: "Cartão RFID do usuário"
+      force:
+        type: "boolean"
+        description: "Força o logout da sessão atual do usuário e cria uma nova"
+  inline_response_200_1_permissions:
+    type: "object"
+    properties:
+      saleCancel:
+        type: "boolean"
+        description: "Permissão para cancelar uma venda"
+      withdrawal:
+        type: "boolean"
+        description: "Permissão para emitir uma sangria"
+      supply:
+        type: "boolean"
+        description: "Permissão para emitir um suprimento"
+      browseSales:
+        type: "boolean"
+        description: "Permissão para visualizar as vendas"
+      changeSettings:
+        type: "boolean"
+        description: "Permissão para alterar a configuração do aplicativo"
+    description: "Permissões de acesso do usuário"
+    example:
+      withdrawal: true
+      browseSales: true
+      supply: true
+      saleCancel: true
+      changeSettings: true
+  inline_response_200_1:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+        description: "Token de acesso padrão JWT"
+      salesmanName:
+        type: "string"
+        description: "Nome do vendedor associado ao usuário"
+      permissions:
+        $ref: "#/definitions/inline_response_200_1_permissions"
+    example:
+      salesmanName: "salesmanName"
+      permissions:
+        withdrawal: true
+        browseSales: true
+        supply: true
+        saleCancel: true
+        changeSettings: true
+      token: "token"
+  inline_response_200_2:
+    type: "object"
+    properties:
+      salesmanId:
+        type: "integer"
+        description: "ID do vendedor associado ao usuário"
+      salesmanName:
+        type: "string"
+        description: "Nome do vendedor associado ao usuário"
+      permissions:
+        $ref: "#/definitions/inline_response_200_1_permissions"
+    example:
+      salesmanName: "salesmanName"
+      salesmanId: 0
+      permissions:
+        withdrawal: true
+        browseSales: true
+        supply: true
+        saleCancel: true
+        changeSettings: true
+  inline_response_200_3:
+    type: "object"
+    properties:
+      account:
+        type: "string"
+        description: "Conta caixa"
+      shiftNumber:
+        type: "integer"
+        description: "Número do turno"
+      shiftType:
+        type: "integer"
+        description: "Tipo de abertura/fechamento do turno (1-Livre 2-Baseado em data/hora\
+          \ 3-Sequencial)"
+      shiftState:
+        type: "integer"
+        description: "Estado do último turno (1-Aberto 2-Fechado)"
+      initialChange:
+        type: "number"
+        description: "Troco inicial"
+      showFinalChange:
+        type: "boolean"
+        description: "Indica se exibe e permite modificar o troco final no fechamento\
+          \ de turno"
+    example:
+      shiftType: 6
+      initialChange: 5.962133916683182377482808078639209270477294921875
+      shiftState: 1
+      showFinalChange: true
+      shiftNumber: 0
+      account: "account"
+  data_2:
+    type: "object"
+    properties:
+      finalChange:
+        type: "number"
+        description: "Troco final"
+      username:
+        type: "string"
+        description: "Nome do usuário"
+      password:
+        type: "string"
+        description: "Senha de acesso do usuário"
+      rfid:
+        type: "string"
+        description: "Cartão RFID do usuário"
+  inline_response_200_4:
+    type: "object"
+    properties:
+      report:
+        type: "string"
+        description: "Relatório de fechamento de turno"
+    example:
+      report: "report"
+  data_3:
+    type: "object"
+    properties:
+      initialChange:
+        type: "number"
+        description: "Troco inicial"
+      shiftNumber:
+        type: "integer"
+        description: "Número do turno"
+      username:
+        type: "string"
+        description: "Nome do usuário"
+      password:
+        type: "string"
+        description: "Senha de acesso do usuário"
+      rfid:
+        type: "string"
+        description: "Cartão RFID do usuário"
+  data_4:
+    type: "object"
+    properties:
+      value:
+        type: "number"
+        description: "Valor do suprimento"
+      info:
+        type: "string"
+        description: "Informação adicional"
+      username:
+        type: "string"
+        description: "Nome do usuário"
+      password:
+        type: "string"
+        description: "Senha de acesso do usuário"
+      rfid:
+        type: "string"
+        description: "Cartão RFID do usuário"
+      layoutColumns:
+        type: "integer"
+        description: "Número de colunas do layout para impressão"
+  inline_response_200_5:
+    type: "object"
+    properties:
+      receipt:
+        type: "string"
+        description: "Comprovante não fiscal do recibo de suprimento"
+    example:
+      receipt: "receipt"
+  data_5:
+    type: "object"
+    properties:
+      value:
+        type: "number"
+        description: "Valor da sangria"
+      id:
+        type: "integer"
+        description: "Id da sangria"
+      info:
+        type: "string"
+        description: "Informação adicional"
+      username:
+        type: "string"
+        description: "Nome do usuário"
+      password:
+        type: "string"
+        description: "Senha de acesso do usuário"
+      rfid:
+        type: "string"
+        description: "Cartão RFID do usuário"
+      layoutColumns:
+        type: "integer"
+        description: "Número de colunas do layout para impressão"
+  inline_response_200_6:
+    type: "object"
+    properties:
+      receipt:
+        type: "string"
+        description: "Comprovante não fiscal do recibo de sangria"
+    example:
+      receipt: "receipt"
+  inline_response_200_7_driver:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Nome do motorista"
+      requestPassword:
+        type: "boolean"
+        description: "Indica se é obrigatória informar a senha do motorista"
+    description: "Dados do motorista"
+    example:
+      requestPassword: true
+      name: "name"
+  inline_response_200_7_customers:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do cliente"
+      code:
+        type: "integer"
+        description: "Código do cliente"
+      name:
+        type: "string"
+        description: "Nome do cliente"
+      nickname:
+        type: "string"
+        description: "Nome reduzido do cliente"
+      cpf:
+        type: "string"
+        description: "CPF ou CNPJ formatado do cliente"
+      plate:
+        type: "string"
+        description: "Placa do veículo"
+      driver:
+        $ref: "#/definitions/inline_response_200_7_driver"
+      loyaltyCard:
+        type: "string"
+        description: "Cartão fidelidade do cliente"
+    description: "Dados do cliente"
+    example:
+      code: 6
+      driver:
+        requestPassword: true
+        name: "name"
+      name: "name"
+      nickname: "nickname"
+      cpf: "cpf"
+      plate: "plate"
+      id: 0
+      loyaltyCard: "loyaltyCard"
+  inline_response_200_7:
+    type: "object"
+    properties:
+      customers:
+        type: "array"
+        description: "Lista de clientes"
+        items:
+          $ref: "#/definitions/inline_response_200_7_customers"
+      nextPage:
+        type: "integer"
+        description: "Número da próxima página (Nulo se não houver próxima página)"
+      prevPage:
+        type: "integer"
+        description: "Número da página anterior (Nulo se não houver página anterior)"
+    example:
+      nextPage: 1
+      prevPage: 5
+      customers:
+      - code: 6
+        driver:
+          requestPassword: true
+          name: "name"
+        name: "name"
+        nickname: "nickname"
+        cpf: "cpf"
+        plate: "plate"
+        id: 0
+        loyaltyCard: "loyaltyCard"
+      - code: 6
+        driver:
+          requestPassword: true
+          name: "name"
+        name: "name"
+        nickname: "nickname"
+        cpf: "cpf"
+        plate: "plate"
+        id: 0
+        loyaltyCard: "loyaltyCard"
+  inline_response_200_8_details_account:
+    type: "object"
+    properties:
+      amountAvailable:
+        type: "number"
+        description: "Valor disponível"
+      amountUsed:
+        type: "number"
+        description: "Valor utilizado"
+      totalAmount:
+        type: "number"
+        description: "Valor total do limite"
+    description: "Dados de crédito da conta (forma de pagamento)"
+    example:
+      totalAmount: 5.962133916683182377482808078639209270477294921875
+      amountAvailable: 6.02745618307040320615897144307382404804229736328125
+      amountUsed: 1.46581298050294517310021547018550336360931396484375
+  inline_response_200_8_details_customer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do cliente"
+      name:
+        type: "string"
+        description: "Nome do cliente"
+      amountAvailable:
+        type: "number"
+        description: "Valor disponível"
+      amountUsed:
+        type: "number"
+        description: "Valor utilizado"
+      totalAmount:
+        type: "number"
+        description: "Valor total do limite"
+    description: "Dados de crédito do cliente"
+    example:
+      totalAmount: 9.301444243932575517419536481611430644989013671875
+      amountAvailable: 2.3021358869347654518833223846741020679473876953125
+      amountUsed: 7.061401241503109105224211816675961017608642578125
+      name: "name"
+      id: 5
+  inline_response_200_8_details_limits:
+    type: "object"
+    properties:
+      typeName:
+        type: "string"
+        description: "Nome do tipo de vencimento (Diário, Semanal, Quinzenal, Mensal,\
+          \ Trimestral, Semestral, Anual, Único)"
+      amountAvailable:
+        type: "number"
+        description: "Valor disponível"
+      amountUsed:
+        type: "number"
+        description: "Valor utilizado"
+      totalAmount:
+        type: "number"
+        description: "Valor total do limite"
+      litersAvailable:
+        type: "number"
+        description: "Litros disponíveis"
+      litersUsed:
+        type: "number"
+        description: "Litros utilizados"
+      totalLiters:
+        type: "number"
+        description: "Total em litros do limite"
+    description: "Dados do limite"
+    example:
+      totalAmount: 7.3862819483858839220147274318151175975799560546875
+      amountAvailable: 2.027123023002321833274663731572218239307403564453125
+      amountUsed: 4.1456080298839363962315474054776132106781005859375
+      typeName: "typeName"
+      litersAvailable: 1.231513536777255612975068288506008684635162353515625
+      litersUsed: 1.024645700144157789424070870154537260532379150390625
+      totalLiters: 1.489415909854170383397331534069962799549102783203125
+  inline_response_200_8_details_drivers:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do motorista"
+      name:
+        type: "string"
+        description: "Nome do motorista"
+      blocked:
+        type: "boolean"
+        description: "Indicador de bloqueado"
+      blockedWeekend:
+        type: "boolean"
+        description: "Indicador de bloqueado aos finais de semana"
+      blockingReason:
+        type: "string"
+        description: "Motivo de bloqueio"
+      limits:
+        type: "array"
+        description: "Lista de limites"
+        items:
+          $ref: "#/definitions/inline_response_200_8_details_limits"
+    description: "Dados do motorista"
+    example:
+      blocked: true
+      name: "name"
+      id: 3
+      blockedWeekend: true
+      blockingReason: "blockingReason"
+      limits:
+      - totalAmount: 7.3862819483858839220147274318151175975799560546875
+        amountAvailable: 2.027123023002321833274663731572218239307403564453125
+        amountUsed: 4.1456080298839363962315474054776132106781005859375
+        typeName: "typeName"
+        litersAvailable: 1.231513536777255612975068288506008684635162353515625
+        litersUsed: 1.024645700144157789424070870154537260532379150390625
+        totalLiters: 1.489415909854170383397331534069962799549102783203125
+      - totalAmount: 7.3862819483858839220147274318151175975799560546875
+        amountAvailable: 2.027123023002321833274663731572218239307403564453125
+        amountUsed: 4.1456080298839363962315474054776132106781005859375
+        typeName: "typeName"
+        litersAvailable: 1.231513536777255612975068288506008684635162353515625
+        litersUsed: 1.024645700144157789424070870154537260532379150390625
+        totalLiters: 1.489415909854170383397331534069962799549102783203125
+  inline_response_200_8_details_summary:
+    type: "object"
+    properties:
+      paymentName:
+        type: "string"
+        description: "Nome da forma de pagamento"
+      amountAvailable:
+        type: "number"
+        description: "Valor disponível"
+      amountBilled:
+        type: "number"
+        description: "Valor faturado"
+      amountPending:
+        type: "number"
+        description: "Valor pendente"
+      amountUsed:
+        type: "number"
+        description: "Valor utilizado"
+      totalAmount:
+        type: "number"
+        description: "Valor total do limite"
+    description: "Dados da forma de pagamento"
+    example:
+      totalAmount: 5.02500479152029466689555192715488374233245849609375
+      amountBilled: 7.4577447736837658709418974467553198337554931640625
+      amountAvailable: 6.8468526983526398765889098285697400569915771484375
+      amountPending: 1.173074250955943309548956676735542714595794677734375
+      amountUsed: 4.9652184929849543237878606305457651615142822265625
+      paymentName: "paymentName"
+  inline_response_200_8_details:
+    type: "object"
+    properties:
+      account:
+        $ref: "#/definitions/inline_response_200_8_details_account"
+      customer:
+        $ref: "#/definitions/inline_response_200_8_details_customer"
+      drivers:
+        type: "array"
+        description: "Lista de Motoristas"
+        items:
+          $ref: "#/definitions/inline_response_200_8_details_drivers"
+      summary:
+        type: "array"
+        description: "Lista com o resumo das formas de pagamento"
+        items:
+          $ref: "#/definitions/inline_response_200_8_details_summary"
+    description: "Detalhes da consulta de crédito"
+    example:
+      summary:
+      - totalAmount: 5.02500479152029466689555192715488374233245849609375
+        amountBilled: 7.4577447736837658709418974467553198337554931640625
+        amountAvailable: 6.8468526983526398765889098285697400569915771484375
+        amountPending: 1.173074250955943309548956676735542714595794677734375
+        amountUsed: 4.9652184929849543237878606305457651615142822265625
+        paymentName: "paymentName"
+      - totalAmount: 5.02500479152029466689555192715488374233245849609375
+        amountBilled: 7.4577447736837658709418974467553198337554931640625
+        amountAvailable: 6.8468526983526398765889098285697400569915771484375
+        amountPending: 1.173074250955943309548956676735542714595794677734375
+        amountUsed: 4.9652184929849543237878606305457651615142822265625
+        paymentName: "paymentName"
+      drivers:
+      - blocked: true
+        name: "name"
+        id: 3
+        blockedWeekend: true
+        blockingReason: "blockingReason"
+        limits:
+        - totalAmount: 7.3862819483858839220147274318151175975799560546875
+          amountAvailable: 2.027123023002321833274663731572218239307403564453125
+          amountUsed: 4.1456080298839363962315474054776132106781005859375
+          typeName: "typeName"
+          litersAvailable: 1.231513536777255612975068288506008684635162353515625
+          litersUsed: 1.024645700144157789424070870154537260532379150390625
+          totalLiters: 1.489415909854170383397331534069962799549102783203125
+        - totalAmount: 7.3862819483858839220147274318151175975799560546875
+          amountAvailable: 2.027123023002321833274663731572218239307403564453125
+          amountUsed: 4.1456080298839363962315474054776132106781005859375
+          typeName: "typeName"
+          litersAvailable: 1.231513536777255612975068288506008684635162353515625
+          litersUsed: 1.024645700144157789424070870154537260532379150390625
+          totalLiters: 1.489415909854170383397331534069962799549102783203125
+      - blocked: true
+        name: "name"
+        id: 3
+        blockedWeekend: true
+        blockingReason: "blockingReason"
+        limits:
+        - totalAmount: 7.3862819483858839220147274318151175975799560546875
+          amountAvailable: 2.027123023002321833274663731572218239307403564453125
+          amountUsed: 4.1456080298839363962315474054776132106781005859375
+          typeName: "typeName"
+          litersAvailable: 1.231513536777255612975068288506008684635162353515625
+          litersUsed: 1.024645700144157789424070870154537260532379150390625
+          totalLiters: 1.489415909854170383397331534069962799549102783203125
+        - totalAmount: 7.3862819483858839220147274318151175975799560546875
+          amountAvailable: 2.027123023002321833274663731572218239307403564453125
+          amountUsed: 4.1456080298839363962315474054776132106781005859375
+          typeName: "typeName"
+          litersAvailable: 1.231513536777255612975068288506008684635162353515625
+          litersUsed: 1.024645700144157789424070870154537260532379150390625
+          totalLiters: 1.489415909854170383397331534069962799549102783203125
+      account:
+        totalAmount: 5.962133916683182377482808078639209270477294921875
+        amountAvailable: 6.02745618307040320615897144307382404804229736328125
+        amountUsed: 1.46581298050294517310021547018550336360931396484375
+      customer:
+        totalAmount: 9.301444243932575517419536481611430644989013671875
+        amountAvailable: 2.3021358869347654518833223846741020679473876953125
+        amountUsed: 7.061401241503109105224211816675961017608642578125
+        name: "name"
+        id: 5
+  inline_response_200_8:
+    type: "object"
+    properties:
+      statusCode:
+        type: "integer"
+        description: "Código de status da consulta (1-Com restrição 2-Sem restriçã\
+          o 3-Forma de pagamento não permitida)"
+      statusMessage:
+        type: "string"
+        description: "Mensagem de status da consulta"
+      restrictions:
+        type: "array"
+        description: "Lista de restrições de crédito"
+        items:
+          type: "string"
+          description: "Descrição da restrição de crédito"
+      details:
+        $ref: "#/definitions/inline_response_200_8_details"
+    example:
+      restrictions:
+      - "restrictions"
+      - "restrictions"
+      details:
+        summary:
+        - totalAmount: 5.02500479152029466689555192715488374233245849609375
+          amountBilled: 7.4577447736837658709418974467553198337554931640625
+          amountAvailable: 6.8468526983526398765889098285697400569915771484375
+          amountPending: 1.173074250955943309548956676735542714595794677734375
+          amountUsed: 4.9652184929849543237878606305457651615142822265625
+          paymentName: "paymentName"
+        - totalAmount: 5.02500479152029466689555192715488374233245849609375
+          amountBilled: 7.4577447736837658709418974467553198337554931640625
+          amountAvailable: 6.8468526983526398765889098285697400569915771484375
+          amountPending: 1.173074250955943309548956676735542714595794677734375
+          amountUsed: 4.9652184929849543237878606305457651615142822265625
+          paymentName: "paymentName"
+        drivers:
+        - blocked: true
+          name: "name"
+          id: 3
+          blockedWeekend: true
+          blockingReason: "blockingReason"
+          limits:
+          - totalAmount: 7.3862819483858839220147274318151175975799560546875
+            amountAvailable: 2.027123023002321833274663731572218239307403564453125
+            amountUsed: 4.1456080298839363962315474054776132106781005859375
+            typeName: "typeName"
+            litersAvailable: 1.231513536777255612975068288506008684635162353515625
+            litersUsed: 1.024645700144157789424070870154537260532379150390625
+            totalLiters: 1.489415909854170383397331534069962799549102783203125
+          - totalAmount: 7.3862819483858839220147274318151175975799560546875
+            amountAvailable: 2.027123023002321833274663731572218239307403564453125
+            amountUsed: 4.1456080298839363962315474054776132106781005859375
+            typeName: "typeName"
+            litersAvailable: 1.231513536777255612975068288506008684635162353515625
+            litersUsed: 1.024645700144157789424070870154537260532379150390625
+            totalLiters: 1.489415909854170383397331534069962799549102783203125
+        - blocked: true
+          name: "name"
+          id: 3
+          blockedWeekend: true
+          blockingReason: "blockingReason"
+          limits:
+          - totalAmount: 7.3862819483858839220147274318151175975799560546875
+            amountAvailable: 2.027123023002321833274663731572218239307403564453125
+            amountUsed: 4.1456080298839363962315474054776132106781005859375
+            typeName: "typeName"
+            litersAvailable: 1.231513536777255612975068288506008684635162353515625
+            litersUsed: 1.024645700144157789424070870154537260532379150390625
+            totalLiters: 1.489415909854170383397331534069962799549102783203125
+          - totalAmount: 7.3862819483858839220147274318151175975799560546875
+            amountAvailable: 2.027123023002321833274663731572218239307403564453125
+            amountUsed: 4.1456080298839363962315474054776132106781005859375
+            typeName: "typeName"
+            litersAvailable: 1.231513536777255612975068288506008684635162353515625
+            litersUsed: 1.024645700144157789424070870154537260532379150390625
+            totalLiters: 1.489415909854170383397331534069962799549102783203125
+        account:
+          totalAmount: 5.962133916683182377482808078639209270477294921875
+          amountAvailable: 6.02745618307040320615897144307382404804229736328125
+          amountUsed: 1.46581298050294517310021547018550336360931396484375
+        customer:
+          totalAmount: 9.301444243932575517419536481611430644989013671875
+          amountAvailable: 2.3021358869347654518833223846741020679473876953125
+          amountUsed: 7.061401241503109105224211816675961017608642578125
+          name: "name"
+          id: 5
+      statusMessage: "statusMessage"
+      statusCode: 0
+  inline_response_200_9:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Nome do motorista"
+      cpf:
+        type: "string"
+        description: "CPF formatado do motorista"
+      requestPassword:
+        type: "boolean"
+        description: "Indica se é obrigatória informar a senha do motorista"
+    description: "Dados do motorista"
+    example:
+      requestPassword: true
+      name: "name"
+      cpf: "cpf"
+  inline_response_200_10:
+    type: "object"
+    properties:
+      plate:
+        type: "string"
+        description: "Placa do veículo"
+      vehicle:
+        type: "string"
+        description: "Descrição do veículo"
+    description: "Dados do veículo da frota"
+    example:
+      plate: "plate"
+      vehicle: "vehicle"
+  data_6:
+    type: "object"
+    properties:
+      filename:
+        type: "string"
+        description: "Nome do arquivo de log"
+      data:
+        type: "string"
+        description: "Conteúdo do arquivo de log (Máximo de 258048 bytes GZipado em\
+          \ Base64)"
+      starting:
+        type: "boolean"
+        description: "Indica se é a parte inicial do log"
+      ending:
+        type: "boolean"
+        description: "Indica se é a parte final do log"
+  inline_response_200_11_employees:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do funcionário"
+      code:
+        type: "integer"
+        description: "Código do funcionário"
+      name:
+        type: "string"
+        description: "Nome do funcionário"
+      rfid:
+        type: "string"
+        description: "RFId do funcionário"
+    description: "Dados do funcionário"
+    example:
+      code: 6
+      name: "name"
+      rfid: "rfid"
+      id: 0
+  inline_response_200_11:
+    type: "object"
+    properties:
+      employees:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_11_employees"
+      nextPage:
+        type: "integer"
+        description: "Número da próxima página (nulo se não houver próxima página)"
+      prevPage:
+        type: "integer"
+        description: "Número da página anterior (nulo se não houver página anterior)"
+    description: "Lista de funcionários"
+    example:
+      nextPage: 1
+      prevPage: 5
+      employees:
+      - code: 6
+        name: "name"
+        rfid: "rfid"
+        id: 0
+      - code: 6
+        name: "name"
+        rfid: "rfid"
+        id: 0
+  v1fuelpump_product:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do produto"
+      code:
+        type: "string"
+        description: "Código do produto"
+      barcode:
+        type: "string"
+        description: "Código de barras principal do produto"
+      barcodes:
+        type: "array"
+        description: "Lista de códigos de barras adicionais"
+        items:
+          type: "string"
+          description: "Código de barras adicional"
+      name:
+        type: "string"
+        description: "Descrição do produto"
+      shortname:
+        type: "string"
+        description: "Descrição resumida do produto"
+      unit:
+        type: "string"
+        description: "Unidade de medida do produto"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do produto no cadastro"
+      type:
+        type: "string"
+        description: "Tipo de produto (C-Combustível M-Mercadoria)"
+    description: "Dados do produto"
+    example:
+      unitPrice: 6.02745618307040320615897144307382404804229736328125
+      unit: "unit"
+      code: "code"
+      name: "name"
+      id: 0
+      barcodes:
+      - "barcodes"
+      - "barcodes"
+      type: "type"
+      barcode: "barcode"
+      shortname: "shortname"
+  inline_response_200_12:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "Número do bico de abastecimento"
+      name:
+        type: "string"
+        description: "Sigla do combustível do bico"
+      manual:
+        type: "boolean"
+        description: "Indica se o bico permite lançamento manual de abastecimentos"
+      product:
+        $ref: "#/definitions/v1fuelpump_product"
+    description: "Dados do bico de abastecimento"
+    example:
+      product:
+        unitPrice: 6.02745618307040320615897144307382404804229736328125
+        unit: "unit"
+        code: "code"
+        name: "name"
+        id: 0
+        barcodes:
+        - "barcodes"
+        - "barcodes"
+        type: "type"
+        barcode: "barcode"
+        shortname: "shortname"
+      name: "name"
+      id: "id"
+      manual: true
+  inline_response_200_13_customer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do cliente"
+      cpf:
+        type: "string"
+        description: "CPF do cliente"
+      name:
+        type: "string"
+        description: "Nome do cliente"
+    description: "Dados do cliente"
+    example:
+      cpf: "cpf"
+      name: "name"
+      id: 7
+  inline_response_200_13_product:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do produto"
+      code:
+        type: "string"
+        description: "Código do produto"
+      barcode:
+        type: "string"
+        description: "Código de barras principal do produto"
+      barcodes:
+        type: "array"
+        description: "Lista de códigos de barras adicionais"
+        items:
+          type: "string"
+          description: "Código de barras adicional"
+      name:
+        type: "string"
+        description: "Descrição do produto"
+      shortname:
+        type: "string"
+        description: "Descrição resumida do produto"
+      unit:
+        type: "string"
+        description: "Unidade de medida do produto"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do produto no cadastro"
+      type:
+        type: "string"
+        description: "Tipo de produto (C-Combustível M-Mercadoria)"
+      requestSalesman:
+        type: "boolean"
+        description: "Indica se deve solicitar o vendedor"
+    description: "Dados do produto"
+    example:
+      unitPrice: 1.024645700144157789424070870154537260532379150390625
+      unit: "unit"
+      code: "code"
+      name: "name"
+      requestSalesman: true
+      id: 1
+      barcodes:
+      - "barcodes"
+      - "barcodes"
+      type: "type"
+      barcode: "barcode"
+      shortname: "shortname"
+  inline_response_200_13_fuellings:
+    type: "object"
+    properties:
+      fuelPumpId:
+        type: "string"
+        description: "Número do bico"
+      id:
+        type: "integer"
+        description: "Código do abastecimento"
+      datetime:
+        type: "string"
+        description: "Data e hora do abastecimento"
+      quantity:
+        type: "number"
+        description: "Quantidade do abastecimento"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário da venda na bomba"
+      price:
+        type: "number"
+        description: "Preço unitário da venda <font size=\"3\" color=\"red\"><b>(Será\
+          \ descontinuado)</b></font>"
+      subtotal:
+        type: "number"
+        description: "SubTotal (Quantidade X Preço unitário)"
+      discount:
+        type: "number"
+        description: "Valor do desconto"
+      addition:
+        type: "number"
+        description: "Valor do acréscimo"
+      total:
+        type: "number"
+        description: "Total (SubTotal - Desconto + Acréscimo)"
+      customerId:
+        type: "integer"
+        description: "Id do cliente identificado no abastecimento"
+      salesmanId:
+        type: "integer"
+        description: "Id do vendedor identificado no abastecimento"
+      salesmanCode:
+        type: "integer"
+        description: "Código do vendedor identificado no abastecimento"
+      salesmanName:
+        type: "string"
+        description: "Nome do vendedor identificado no abastecimento"
+      customer:
+        $ref: "#/definitions/inline_response_200_13_customer"
+      product:
+        $ref: "#/definitions/inline_response_200_13_product"
+    description: "Dados do abastecimento"
+    example:
+      unitPrice: 1.46581298050294517310021547018550336360931396484375
+      salesmanName: "salesmanName"
+      salesmanId: 2
+      product:
+        unitPrice: 1.024645700144157789424070870154537260532379150390625
+        unit: "unit"
+        code: "code"
+        name: "name"
+        requestSalesman: true
+        id: 1
+        barcodes:
+        - "barcodes"
+        - "barcodes"
+        type: "type"
+        barcode: "barcode"
+        shortname: "shortname"
+      quantity: 6.02745618307040320615897144307382404804229736328125
+      salesmanCode: 4
+      discount: 2.3021358869347654518833223846741020679473876953125
+      fuelPumpId: "fuelPumpId"
+      datetime: "datetime"
+      total: 9.301444243932575517419536481611430644989013671875
+      price: 5.962133916683182377482808078639209270477294921875
+      subtotal: 5.63737665663332876420099637471139430999755859375
+      customerId: 3
+      id: 0
+      addition: 7.061401241503109105224211816675961017608642578125
+      customer:
+        cpf: "cpf"
+        name: "name"
+        id: 7
+  inline_response_200_13:
+    type: "object"
+    properties:
+      fuellings:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_13_fuellings"
+      nextPage:
+        type: "integer"
+        description: "Número da próxima página (Nulo se não houver próxima página)"
+      prevPage:
+        type: "integer"
+        description: "Número da página anterior (Nulo se não houver página anterior)"
+    description: "Lista de abastecimentos"
+    example:
+      fuellings:
+      - unitPrice: 1.46581298050294517310021547018550336360931396484375
+        salesmanName: "salesmanName"
+        salesmanId: 2
+        product:
+          unitPrice: 1.024645700144157789424070870154537260532379150390625
+          unit: "unit"
+          code: "code"
+          name: "name"
+          requestSalesman: true
+          id: 1
+          barcodes:
+          - "barcodes"
+          - "barcodes"
+          type: "type"
+          barcode: "barcode"
+          shortname: "shortname"
+        quantity: 6.02745618307040320615897144307382404804229736328125
+        salesmanCode: 4
+        discount: 2.3021358869347654518833223846741020679473876953125
+        fuelPumpId: "fuelPumpId"
+        datetime: "datetime"
+        total: 9.301444243932575517419536481611430644989013671875
+        price: 5.962133916683182377482808078639209270477294921875
+        subtotal: 5.63737665663332876420099637471139430999755859375
+        customerId: 3
+        id: 0
+        addition: 7.061401241503109105224211816675961017608642578125
+        customer:
+          cpf: "cpf"
+          name: "name"
+          id: 7
+      - unitPrice: 1.46581298050294517310021547018550336360931396484375
+        salesmanName: "salesmanName"
+        salesmanId: 2
+        product:
+          unitPrice: 1.024645700144157789424070870154537260532379150390625
+          unit: "unit"
+          code: "code"
+          name: "name"
+          requestSalesman: true
+          id: 1
+          barcodes:
+          - "barcodes"
+          - "barcodes"
+          type: "type"
+          barcode: "barcode"
+          shortname: "shortname"
+        quantity: 6.02745618307040320615897144307382404804229736328125
+        salesmanCode: 4
+        discount: 2.3021358869347654518833223846741020679473876953125
+        fuelPumpId: "fuelPumpId"
+        datetime: "datetime"
+        total: 9.301444243932575517419536481611430644989013671875
+        price: 5.962133916683182377482808078639209270477294921875
+        subtotal: 5.63737665663332876420099637471139430999755859375
+        customerId: 3
+        id: 0
+        addition: 7.061401241503109105224211816675961017608642578125
+        customer:
+          cpf: "cpf"
+          name: "name"
+          id: 7
+      nextPage: 1
+      prevPage: 6
+  inline_response_200_14:
+    type: "object"
+    properties:
+      fuellings:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_13_fuellings"
+      nextPage:
+        type: "integer"
+        description: "Número da próxima página (Nulo se não houver próxima página)"
+      prevPage:
+        type: "integer"
+        description: "Número da página anterior (Nulo se não houver página anterior)"
+    description: "Lista de abastecimentos do bico"
+    example:
+      fuellings:
+      - unitPrice: 1.46581298050294517310021547018550336360931396484375
+        salesmanName: "salesmanName"
+        salesmanId: 2
+        product:
+          unitPrice: 1.024645700144157789424070870154537260532379150390625
+          unit: "unit"
+          code: "code"
+          name: "name"
+          requestSalesman: true
+          id: 1
+          barcodes:
+          - "barcodes"
+          - "barcodes"
+          type: "type"
+          barcode: "barcode"
+          shortname: "shortname"
+        quantity: 6.02745618307040320615897144307382404804229736328125
+        salesmanCode: 4
+        discount: 2.3021358869347654518833223846741020679473876953125
+        fuelPumpId: "fuelPumpId"
+        datetime: "datetime"
+        total: 9.301444243932575517419536481611430644989013671875
+        price: 5.962133916683182377482808078639209270477294921875
+        subtotal: 5.63737665663332876420099637471139430999755859375
+        customerId: 3
+        id: 0
+        addition: 7.061401241503109105224211816675961017608642578125
+        customer:
+          cpf: "cpf"
+          name: "name"
+          id: 7
+      - unitPrice: 1.46581298050294517310021547018550336360931396484375
+        salesmanName: "salesmanName"
+        salesmanId: 2
+        product:
+          unitPrice: 1.024645700144157789424070870154537260532379150390625
+          unit: "unit"
+          code: "code"
+          name: "name"
+          requestSalesman: true
+          id: 1
+          barcodes:
+          - "barcodes"
+          - "barcodes"
+          type: "type"
+          barcode: "barcode"
+          shortname: "shortname"
+        quantity: 6.02745618307040320615897144307382404804229736328125
+        salesmanCode: 4
+        discount: 2.3021358869347654518833223846741020679473876953125
+        fuelPumpId: "fuelPumpId"
+        datetime: "datetime"
+        total: 9.301444243932575517419536481611430644989013671875
+        price: 5.962133916683182377482808078639209270477294921875
+        subtotal: 5.63737665663332876420099637471139430999755859375
+        customerId: 3
+        id: 0
+        addition: 7.061401241503109105224211816675961017608642578125
+        customer:
+          cpf: "cpf"
+          name: "name"
+          id: 7
+      nextPage: 0
+      prevPage: 6
+  inline_response_200_15:
+    type: "object"
+    properties:
+      orderId:
+        type: "integer"
+        description: "Id da pré-venda ao qual o abastecimento foi associado"
+    example:
+      orderId: 0
+  v1inventory_items:
+    type: "object"
+    properties:
+      productId:
+        type: "integer"
+        description: "Id do produto"
+      warehouseId:
+        type: "integer"
+        description: "Id do depósito"
+      groupId:
+        type: "integer"
+        description: "Id do grupo de produtos (Nulo para quando a contagem não for\
+          \ por grupo de produtos)"
+      barcode:
+        type: "string"
+        description: "Código de barras capturado para inventariar o produto"
+      datatime:
+        type: "string"
+        description: "Data e hora em que o produto foi inventariado"
+      quantity:
+        type: "number"
+        description: "Quantidade inventariada"
+    description: "Dados do item inventariado"
+  data_7:
+    type: "object"
+    properties:
+      employeeId:
+        type: "integer"
+        description: "Id do funcionário que realizou o inventário"
+      datatime:
+        type: "string"
+        description: "Data e hora em que foi finalizado o inventário"
+      items:
+        type: "array"
+        description: "Lista de itens inventariados"
+        items:
+          $ref: "#/definitions/v1inventory_items"
+      resetGroups:
+        type: "array"
+        description: "Lista de grupos de produtos a zerar os produtos não inventariados"
+        items:
+          type: "integer"
+          description: "Id do grupo de produtos"
+      resetWarehouses:
+        type: "array"
+        description: "Lista de depósitos a zerar os produtos não inventariados"
+        items:
+          type: "integer"
+          description: "Id do depósito"
+  inline_response_200_16:
+    type: "object"
+    properties:
+      dtef:
+        type: "integer"
+        description: "1-Crédito 2-Débito 4-Voucher (Conforme DTef)"
+      id:
+        type: "integer"
+        description: "Id da forma de pagamento (1-Dinheiro 2-Crédito 3-Débito 4-Faturado\
+          \ 5-ShellBox 6-Voucher 7-QRLinx PIX)"
+      name:
+        type: "string"
+        description: "Nome da forma de pagamento"
+      creditCheck:
+        type: "boolean"
+        description: "Indicador de consulta de restrição de crédito obrigatória para\
+          \ autorizar a forma de pagamento na venda"
+    description: "Dados da forma de pagamento"
+    example:
+      creditCheck: true
+      name: "name"
+      id: 6
+      dtef: 0
+  inline_response_200_17_groupProducts:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do produto"
+      code:
+        type: "string"
+        description: "Código do produto"
+      name:
+        type: "string"
+        description: "Descrição do produto"
+      unit:
+        type: "string"
+        description: "Unidade de medida do produto"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do produto"
+    description: "Dados do produto"
+    example:
+      unitPrice: 2.3021358869347654518833223846741020679473876953125
+      unit: "unit"
+      code: "code"
+      name: "name"
+      id: 5
+  inline_response_200_17_comboGroups:
+    type: "object"
+    properties:
+      quantity:
+        type: "number"
+        description: "Quantidade do grupo"
+      groupProducts:
+        type: "array"
+        description: "Lista de produtos do agrupamento"
+        items:
+          $ref: "#/definitions/inline_response_200_17_groupProducts"
+    description: "Dados do agrupamento"
+    example:
+      quantity: 5.962133916683182377482808078639209270477294921875
+      groupProducts:
+      - unitPrice: 2.3021358869347654518833223846741020679473876953125
+        unit: "unit"
+        code: "code"
+        name: "name"
+        id: 5
+      - unitPrice: 2.3021358869347654518833223846741020679473876953125
+        unit: "unit"
+        code: "code"
+        name: "name"
+        id: 5
+  inline_response_200_17_products:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do produto"
+      code:
+        type: "string"
+        description: "Código do produto"
+      barcode:
+        type: "string"
+        description: "Código de barras principal do produto"
+      barcodes:
+        type: "array"
+        description: "Lista de códigos de barras adicionais"
+        items:
+          type: "string"
+          description: "Código de barras adicional"
+      name:
+        type: "string"
+        description: "Descrição do produto"
+      shortname:
+        type: "string"
+        description: "Descrição resumida do produto"
+      unit:
+        type: "string"
+        description: "Unidade de medida do produto"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do produto no cadastro"
+      type:
+        type: "string"
+        description: "Tipo de produto (C-Combustível M-Mercadoria K-Kit/Combo Simples\
+          \ KV-Kit/Combo Variável)"
+      groupId:
+        type: "integer"
+        description: "Id do grupo de produto"
+      requestSalesman:
+        type: "boolean"
+        description: "Indica se deve solicitar o vendedor"
+      comboGroups:
+        type: "array"
+        description: "Lista de agrupamentos do kit/combo"
+        items:
+          $ref: "#/definitions/inline_response_200_17_comboGroups"
+      warehouses:
+        type: "array"
+        description: "Lista de depósitos do produto"
+        items:
+          type: "integer"
+          description: "Id do depósito"
+    description: "Dados do produto"
+    example:
+      unitPrice: 6.02745618307040320615897144307382404804229736328125
+      code: "code"
+      groupId: 1
+      warehouses:
+      - 7
+      - 7
+      barcodes:
+      - "barcodes"
+      - "barcodes"
+      type: "type"
+      shortname: "shortname"
+      unit: "unit"
+      comboGroups:
+      - quantity: 5.962133916683182377482808078639209270477294921875
+        groupProducts:
+        - unitPrice: 2.3021358869347654518833223846741020679473876953125
+          unit: "unit"
+          code: "code"
+          name: "name"
+          id: 5
+        - unitPrice: 2.3021358869347654518833223846741020679473876953125
+          unit: "unit"
+          code: "code"
+          name: "name"
+          id: 5
+      - quantity: 5.962133916683182377482808078639209270477294921875
+        groupProducts:
+        - unitPrice: 2.3021358869347654518833223846741020679473876953125
+          unit: "unit"
+          code: "code"
+          name: "name"
+          id: 5
+        - unitPrice: 2.3021358869347654518833223846741020679473876953125
+          unit: "unit"
+          code: "code"
+          name: "name"
+          id: 5
+      name: "name"
+      requestSalesman: true
+      id: 0
+      barcode: "barcode"
+  inline_response_200_17:
+    type: "object"
+    properties:
+      products:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_17_products"
+      nextPage:
+        type: "integer"
+        description: "Número da próxima página (Nulo se não houver próxima página)"
+      prevPage:
+        type: "integer"
+        description: "Número da página anterior (Nulo se não houver página anterior)"
+    description: "Lista de produtos"
+    example:
+      nextPage: 9
+      prevPage: 3
+      products:
+      - unitPrice: 6.02745618307040320615897144307382404804229736328125
+        code: "code"
+        groupId: 1
+        warehouses:
+        - 7
+        - 7
+        barcodes:
+        - "barcodes"
+        - "barcodes"
+        type: "type"
+        shortname: "shortname"
+        unit: "unit"
+        comboGroups:
+        - quantity: 5.962133916683182377482808078639209270477294921875
+          groupProducts:
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+        - quantity: 5.962133916683182377482808078639209270477294921875
+          groupProducts:
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+        name: "name"
+        requestSalesman: true
+        id: 0
+        barcode: "barcode"
+      - unitPrice: 6.02745618307040320615897144307382404804229736328125
+        code: "code"
+        groupId: 1
+        warehouses:
+        - 7
+        - 7
+        barcodes:
+        - "barcodes"
+        - "barcodes"
+        type: "type"
+        shortname: "shortname"
+        unit: "unit"
+        comboGroups:
+        - quantity: 5.962133916683182377482808078639209270477294921875
+          groupProducts:
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+        - quantity: 5.962133916683182377482808078639209270477294921875
+          groupProducts:
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+          - unitPrice: 2.3021358869347654518833223846741020679473876953125
+            unit: "unit"
+            code: "code"
+            name: "name"
+            id: 5
+        name: "name"
+        requestSalesman: true
+        id: 0
+        barcode: "barcode"
+  inline_response_200_18:
+    type: "object"
+    properties:
+      unitPrice:
+        type: "number"
+        description: "Preço unitário de venda do produto"
+      currentBalance:
+        type: "number"
+        description: "Saldo atual em estoque do produto"
+      lastPurchase:
+        type: "string"
+        description: "Data da última compra do produto"
+      invoiceNumber:
+        type: "string"
+        description: "Número da última nota fiscal de compra"
+      supplierName:
+        type: "string"
+        description: "Nome do fornecedor do produto"
+      quantity:
+        type: "number"
+        description: "Quantidade da última entrada"
+      costPrice:
+        type: "number"
+        description: "Preço unitário de custo da última entrada"
+      totalCost:
+        type: "number"
+        description: "Total de custo da última entrada"
+    description: "Dados do histórico de compras"
+  inline_response_200_19:
+    type: "object"
+    properties:
+      productId:
+        type: "integer"
+        description: "Id do produto"
+      warehouseId:
+        type: "integer"
+        description: "Id do depósito"
+      currentBalance:
+        type: "number"
+        description: "Saldo atual em estoque"
+    description: "Dados do saldo em estoque"
+  inline_response_200_20_groups:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do grupo de produto"
+      code:
+        type: "string"
+        description: "Código do grupo de produto"
+      name:
+        type: "string"
+        description: "Descrição do grupo de produto"
+    description: "Dados do grupo de produto"
+  inline_response_200_20:
+    type: "object"
+    properties:
+      groups:
+        type: "array"
+        description: "Lista de grupos de produtos"
+        items:
+          $ref: "#/definitions/inline_response_200_20_groups"
+      nextPage:
+        type: "integer"
+        description: "Número da próxima página (Nulo se não houver próxima página)"
+      prevPage:
+        type: "integer"
+        description: "Número da página anterior (Nulo se não houver página anterior)"
+  v1sale_items:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do item (Ordem sequencial)"
+      name:
+        type: "string"
+        description: "Descrição do produto"
+      type:
+        type: "string"
+        description: "Tipo de produto (C-Combustível K-Kit M-Mercadoria)"
+      quantity:
+        type: "number"
+        description: "Quantidade vendida"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do item"
+      total:
+        type: "number"
+        description: "Total do item"
+      unit:
+        type: "string"
+        description: "Unidade de medida"
+      fuelPumpId:
+        type: "string"
+        description: "Número do bico"
+    description: "Dados do item"
+    example:
+      unitPrice: 7.061401241503109105224211816675961017608642578125
+      fuelPumpId: "fuelPumpId"
+      total: 9.301444243932575517419536481611430644989013671875
+      unit: "unit"
+      quantity: 2.3021358869347654518833223846741020679473876953125
+      name: "name"
+      id: 5
+      type: "type"
+  v1sale_tef:
+    type: "object"
+    properties:
+      value:
+        type: "number"
+        description: "Valor da transação"
+      nsuNumber:
+        type: "string"
+        description: "Número do NSU da transação (NSU)"
+      datetime:
+        type: "string"
+        description: "Data e hora da transação (DataFiscal + HoraFiscal)"
+    description: "Dados da transação TEF"
+    example:
+      datetime: "datetime"
+      nsuNumber: "nsuNumber"
+      value: 3.61607674925191080461672754609026014804840087890625
+  v1sale_payments:
+    type: "object"
+    properties:
+      tef:
+        $ref: "#/definitions/v1sale_tef"
+    description: "Dados do pagamento"
+    example:
+      tef:
+        datetime: "datetime"
+        nsuNumber: "nsuNumber"
+        value: 3.61607674925191080461672754609026014804840087890625
+  inline_response_200_21:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id da venda"
+      document:
+        type: "string"
+        description: "Número do documento fiscal"
+      datetime:
+        type: "string"
+        description: "Data e hora da venda"
+      discount:
+        type: "number"
+        description: "Desconto da venda"
+      addition:
+        type: "number"
+        description: "Acréscimo da venda"
+      total:
+        type: "number"
+        description: "Total da venda"
+      productNames:
+        type: "string"
+        description: "Nomes dos produtos separados por virgula"
+      paymentNames:
+        type: "string"
+        description: "Nomes das formas de pagamento separadas por virgula"
+      paymentName:
+        type: "string"
+        description: "Nome da forma de pagamento utilizada na venda <font size=\"\
+          3\" color=\"red\"><b>(Será descontinuado)</b></font>"
+      canceled:
+        type: "boolean"
+        description: "Indica se a venda foi cancelada"
+      items:
+        type: "array"
+        description: "Lista de itens"
+        items:
+          $ref: "#/definitions/v1sale_items"
+      payments:
+        type: "array"
+        description: "Lista de pagamentos"
+        items:
+          $ref: "#/definitions/v1sale_payments"
+    description: "Dados da venda"
+    example:
+      canceled: true
+      datetime: "datetime"
+      total: 5.962133916683182377482808078639209270477294921875
+      document: "document"
+      payments:
+      - tef:
+          datetime: "datetime"
+          nsuNumber: "nsuNumber"
+          value: 3.61607674925191080461672754609026014804840087890625
+      - tef:
+          datetime: "datetime"
+          nsuNumber: "nsuNumber"
+          value: 3.61607674925191080461672754609026014804840087890625
+      discount: 6.02745618307040320615897144307382404804229736328125
+      productNames: "productNames"
+      id: 0
+      paymentNames: "paymentNames"
+      paymentName: "paymentName"
+      items:
+      - unitPrice: 7.061401241503109105224211816675961017608642578125
+        fuelPumpId: "fuelPumpId"
+        total: 9.301444243932575517419536481611430644989013671875
+        unit: "unit"
+        quantity: 2.3021358869347654518833223846741020679473876953125
+        name: "name"
+        id: 5
+        type: "type"
+      - unitPrice: 7.061401241503109105224211816675961017608642578125
+        fuelPumpId: "fuelPumpId"
+        total: 9.301444243932575517419536481611430644989013671875
+        unit: "unit"
+        quantity: 2.3021358869347654518833223846741020679473876953125
+        name: "name"
+        id: 5
+        type: "type"
+      addition: 1.46581298050294517310021547018550336360931396484375
+  v1sale_customer:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do cliente"
+      name:
+        type: "string"
+        description: "Nome do cliente"
+      cpf:
+        type: "string"
+        description: "CPF ou CNPJ formatado do cliente"
+      address:
+        type: "string"
+        description: "Endereço do cliente"
+      addressNumber:
+        type: "string"
+        description: "Número do endereço"
+      addressComplement:
+        type: "string"
+        description: "Complemento do endereço"
+      neighborhood:
+        type: "string"
+        description: "Bairro do endereço"
+      city:
+        type: "string"
+        description: "Cidade do endereço"
+      state:
+        type: "string"
+        description: "Estado do endereço (UF)"
+      zipCode:
+        type: "string"
+        description: "CEP do endereço"
+      driver:
+        type: "string"
+        description: "Nome do motorista"
+      driverPassword:
+        type: "string"
+        description: "Senha do motorista"
+      plate:
+        type: "string"
+        description: "Placa do veículo"
+      mileage:
+        type: "integer"
+        description: "Quilometragem do veículo"
+      signature:
+        type: "string"
+        description: "Assinatura do cliente em base64"
+      photo:
+        type: "string"
+        description: "Fotografia do cliente em base64"
+      subscription:
+        type: "string"
+        description: "Assinatura do cliente em base64 <font size=\"3\" color=\"red\"\
+          ><b>(Será descontinuado)</b></font>"
+    description: "Dados do cliente"
+  v1sale_comboItems:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do produto que compõem o kit/combo"
+      quantity:
+        type: "number"
+        description: "Quantidade vendida do item que compõem o kit/combo"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do produto que compõem o kit/combo"
+    description: "Dados do item que compõem o kit/combo"
+  v1sale_items_1:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do item (Ordem sequencial 1, 2, 3 ...)"
+      quantity:
+        type: "number"
+        description: "Quantidade vendida"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do item"
+      subtotal:
+        type: "number"
+        description: "SubTotal do item (Quantidade X Preço unitário)"
+      discount:
+        type: "number"
+        description: "Valor do desconto"
+      addition:
+        type: "number"
+        description: "Valor do acréscimo"
+      total:
+        type: "number"
+        description: "Total do item (SubTotal - Desconto + Acréscimo)"
+      fuelPumpId:
+        type: "integer"
+        description: "Número do bico (Somente para abastecimento manual)"
+      fuellingId:
+        type: "integer"
+        description: "Código do abastecimento (Zero para abastecimento manual)"
+      productId:
+        type: "integer"
+        description: "Id do produto"
+      barcode:
+        type: "string"
+        description: "Código de barras principal do produto"
+      salesmanId:
+        type: "integer"
+        description: "Id do vendedor"
+      comboItems:
+        type: "array"
+        description: "Lista de items que compõem o kit/combo"
+        items:
+          $ref: "#/definitions/v1sale_comboItems"
+    description: "Dados do item"
+  v1sale_tef_1:
+    type: "object"
+    properties:
+      tefModule:
+        type: "string"
+        description: "Módulo TEF (DTEF, STONE, CIELO, REDE, SAFRA)"
+      transactionData:
+        type: "object"
+        description: "Dados originais da transação TEF conforme módulo"
+        properties: {}
+      cardBrandCode:
+        type: "string"
+        description: "Código da bandeira do cartão (DTEF.CodigoBandeira STONE.cardBrand)"
+      cardBrandName:
+        type: "string"
+        description: "Nome da bandeira do cartão (DTEF.NomeBandeira STONE.cardBrand)"
+      acquirerCode:
+        type: "string"
+        description: "Código da adquirente (DTEF.CodigoRede)"
+      acquirerCnpj:
+        type: "string"
+        description: "CNPJ da adquirente (DTEF.CNPJRede)"
+      transactionCode:
+        type: "string"
+        description: "Código da transação (DTEF.TipoOperacao)"
+      responseCode:
+        type: "string"
+        description: "Código da resposta (DTEF.CodigoResposta)"
+      nsuNumber:
+        type: "string"
+        description: "Número do NSU da transação (DTEF.NSU)"
+      nsuAuthorizer:
+        type: "string"
+        description: "Número do NSU da autorizadora (DTEF.NSURede)"
+      authorizationCode:
+        type: "string"
+        description: "Código de autorização (DTEF.CodigoAutorizacao)"
+      cardBinNumber:
+        type: "string"
+        description: "Número do cartão (DTEF.NumeroCartao STONE.cardHolderNumber)"
+      cardHolderName:
+        type: "string"
+        description: "Nome do portador do cartão (DTEF.NomePortadorCartao STONE.cardHolderName)"
+      installments:
+        type: "string"
+        description: "Número de parcelas (DTEF.NumeroParcelas)"
+      financingType:
+        type: "string"
+        description: "Tipo de financiamento (DTEF.TipoFinanciamento)"
+      datetime:
+        type: "string"
+        description: "Data e hora da transação (DTEF.DataFiscal+DTEF.HoraFiscal STONE.date+STONE.time)"
+      storeTefReceipt:
+        type: "string"
+        description: "Comprovante via do estabelecimento (DTEF.ComprovanteEstabelecimento)"
+      customerTefReceipt:
+        type: "string"
+        description: "Comprovante via do cliente (DTEF.ComprovanteCliente)"
+      customReceipts:
+        type: "string"
+        description: "Comprovante via do cliente (DTEF.ComprovanteCliente)"
+    description: "Dados da transação TEF"
+  v1sale_payments_1:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id da forma de pagamento"
+      value:
+        type: "number"
+        description: "Valor pago"
+      discount:
+        type: "number"
+        description: "Valor do desconto"
+      addition:
+        type: "number"
+        description: "Valor do acréscimo"
+      qrLinx:
+        type: "object"
+        description: "Dados da transação QRLinx PIX"
+        properties: {}
+      tef:
+        $ref: "#/definitions/v1sale_tef_1"
+    description: "Dados do pagamento"
+  data_8:
+    type: "object"
+    properties:
+      uid:
+        type: "string"
+        description: "Id da venda (formato UUID4 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)"
+      customer:
+        $ref: "#/definitions/v1sale_customer"
+      items:
+        type: "array"
+        description: "Lista de itens"
+        items:
+          $ref: "#/definitions/v1sale_items_1"
+      subtotal:
+        type: "number"
+        description: "Subtotal da venda (Total dos itens)"
+      discount:
+        type: "number"
+        description: "Desconto da venda"
+      addition:
+        type: "number"
+        description: "Acréscimo da venda"
+      total:
+        type: "number"
+        description: "Total da venda (SubTotal - Desconto + Acréscimo)"
+      salesmanId:
+        type: "integer"
+        description: "Id do vendedor"
+      voucherPostoAki:
+        type: "string"
+        description: "Código do voucher PostoAki"
+      payments:
+        type: "array"
+        description: "Lista de pagamento"
+        items:
+          $ref: "#/definitions/v1sale_payments_1"
+  v1salecheckout_payments:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id da forma de pagamento"
+      value:
+        type: "number"
+        description: "Valor pago"
+      tefModule:
+        type: "string"
+        description: "Módulo TEF (DTEF, STONE, CIELO, REDE, SAFRA)"
+    description: "Dados do pagamento"
+  data_9:
+    type: "object"
+    properties:
+      customer:
+        $ref: "#/definitions/v1sale_customer"
+      items:
+        type: "array"
+        description: "Lista de itens"
+        items:
+          $ref: "#/definitions/v1sale_items_1"
+      subtotal:
+        type: "number"
+        description: "Subtotal da venda (Total dos itens)"
+      discount:
+        type: "number"
+        description: "Desconto da venda"
+      addition:
+        type: "number"
+        description: "Acréscimo da venda"
+      total:
+        type: "number"
+        description: "Total da venda (SubTotal - Desconto + Acréscimo)"
+      payments:
+        type: "array"
+        description: "Lista de pagamentos"
+        items:
+          $ref: "#/definitions/v1salecheckout_payments"
+      salesmanId:
+        type: "integer"
+        description: "Id do vendedor"
+      voucherPostoAki:
+        type: "string"
+        description: "Código do voucher PostoAki"
+  inline_response_200_22_payments:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id da forma de pagamento"
+      subtotal:
+        type: "number"
+        description: "Subtotal do pagamento sem regra de preço"
+      discount:
+        type: "number"
+        description: "Desconto concedido pela regra de preço"
+      addition:
+        type: "number"
+        description: "Acréscimo aplicado pela regra de preço"
+      total:
+        type: "number"
+        description: "Total do pagamento com regra de preço (SubTotal - Desconto +\
+          \ Acréscimo)"
+    description: "Dados do pagamento"
+    example:
+      total: 3.61607674925191080461672754609026014804840087890625
+      subtotal: 2.3021358869347654518833223846741020679473876953125
+      discount: 7.061401241503109105224211816675961017608642578125
+      id: 5
+      addition: 9.301444243932575517419536481611430644989013671875
+  inline_response_200_22:
+    type: "object"
+    properties:
+      subtotal:
+        type: "number"
+        description: "Subtotal da venda sem regra de preço"
+      discount:
+        type: "number"
+        description: "Desconto concedido pela regra de preço"
+      addition:
+        type: "number"
+        description: "Acréscimo aplicado pela regra de preço"
+      total:
+        type: "number"
+        description: "Total da venda com regra de preço (SubTotal - Desconto + Acré\
+          scimo)"
+      priceRule:
+        type: "string"
+        description: "Descrição da regra de preço aplicada"
+      payments:
+        type: "array"
+        description: "Lista de pagamento"
+        items:
+          $ref: "#/definitions/inline_response_200_22_payments"
+    example:
+      total: 5.962133916683182377482808078639209270477294921875
+      subtotal: 0.80082819046101150206595775671303272247314453125
+      payments:
+      - total: 3.61607674925191080461672754609026014804840087890625
+        subtotal: 2.3021358869347654518833223846741020679473876953125
+        discount: 7.061401241503109105224211816675961017608642578125
+        id: 5
+        addition: 9.301444243932575517419536481611430644989013671875
+      - total: 3.61607674925191080461672754609026014804840087890625
+        subtotal: 2.3021358869347654518833223846741020679473876953125
+        discount: 7.061401241503109105224211816675961017608642578125
+        id: 5
+        addition: 9.301444243932575517419536481611430644989013671875
+      discount: 6.02745618307040320615897144307382404804229736328125
+      addition: 1.46581298050294517310021547018550336360931396484375
+      priceRule: "priceRule"
+  data_10:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do cliente"
+      name:
+        type: "string"
+        description: "Nome do cliente"
+      cpf:
+        type: "string"
+        description: "CPF ou CNPJ formatado do cliente"
+      address:
+        type: "string"
+        description: "Endereço do cliente"
+      addressNumber:
+        type: "string"
+        description: "Número do endereço"
+      addressComplement:
+        type: "string"
+        description: "Complemento do endereço"
+      neighborhood:
+        type: "string"
+        description: "Bairro do endereço"
+      city:
+        type: "string"
+        description: "Cidade do endereço"
+      state:
+        type: "string"
+        description: "Estado do endereço (UF)"
+      zipCode:
+        type: "string"
+        description: "CEP do endereço"
+      driver:
+        type: "string"
+        description: "Nome do motorista"
+      driverPassword:
+        type: "string"
+        description: "Senha do motorista"
+      plate:
+        type: "string"
+        description: "Placa do veículo"
+      mileage:
+        type: "integer"
+        description: "Quilometragem do veículo"
+  data_11:
+    type: "object"
+    properties:
+      quantity:
+        type: "number"
+        description: "Quantidade vendida"
+      unitPrice:
+        type: "number"
+        description: "Preço unitário do item"
+      subtotal:
+        type: "number"
+        description: "SubTotal do item (Quantidade X Preço unitário)"
+      discount:
+        type: "number"
+        description: "Valor do desconto"
+      addition:
+        type: "number"
+        description: "Valor do acréscimo"
+      total:
+        type: "number"
+        description: "Total do item (SubTotal - Desconto + Acréscimo)"
+      fuelPumpId:
+        type: "integer"
+        description: "Número do bico (Somente para abastecimento manual)"
+      fuellingId:
+        type: "integer"
+        description: "Código do abastecimento (Zero para abastecimento manual)"
+      productId:
+        type: "integer"
+        description: "Id do produto"
+      barcode:
+        type: "string"
+        description: "Código de barras principal do produto"
+      salesmanId:
+        type: "integer"
+        description: "Id do vendedor"
+      comboItems:
+        type: "array"
+        description: "Lista de items que compõem o kit/combo"
+        items:
+          $ref: "#/definitions/v1sale_comboItems"
+  inline_response_200_23_qrLinx:
+    type: "object"
+    properties:
+      storeReceipt:
+        type: "string"
+        description: "Comprovantes de pagamento (vias do estabelecimento)"
+      customerReceipt:
+        type: "string"
+        description: "Comprovantes de pagamento (vias do cliente)"
+    description: "Dados do pagamento QRLinx PIX"
+    example:
+      storeReceipt: "storeReceipt"
+      customerReceipt: "customerReceipt"
+  inline_response_200_23:
+    type: "object"
+    properties:
+      saleId:
+        type: "integer"
+        description: "Id da venda"
+      storeTefReceipt:
+        type: "string"
+        description: "Comprovante de pagamento TEF via do estabelecimento"
+      taxReceipt:
+        type: "string"
+        description: "Documento fiscal (Danfe ou Extrato SAT)"
+      taxReceiptContingency:
+        type: "string"
+        description: "Documento fiscal quando emitido em contingência (Danfe)"
+      infoAdditional:
+        type: "string"
+        description: "Informação adicional (Danfe ou Extrato SAT)"
+      qrCode:
+        type: "string"
+        description: "QRCode do documento fiscal (Danfe ou Extrato SAT)"
+      customerTefReceipt:
+        type: "string"
+        description: "Comprovante de pagamento TEF via do cliente"
+      barcode:
+        type: "string"
+        description: "Código de barras do documento fiscal (Extrato SAT)"
+      invoiceReceipt:
+        type: "string"
+        description: "Comprovante de pagamento a faturar"
+      invoiceReceiptSign:
+        type: "string"
+        description: "Assinatura do comprovante de pagamento a faturar <font size=\"\
+          3\" color=\"red\"><b>(Será descontinuado)</b></font>"
+      invoiceReceiptAdditional:
+        type: "string"
+        description: "Informação adicional do comprovante de pagamento a faturar"
+      invoiceReceiptSignature:
+        type: "string"
+        description: "Assinatura digital em base64 do comprovante de pagamento a faturar"
+      invoiceReceiptCopies:
+        type: "integer"
+        description: "Quantidade de cópias do comprovante de pagamento a faturar"
+      customTefReceipts:
+        type: "array"
+        description: "Lista de NSU para impressão (Somente STONE)"
+        items:
+          type: "string"
+          description: "Número do NSU para impressão (Somente STONE)"
+      cashReceipt:
+        type: "string"
+        description: "Comprovante de pagamento em dinheiro"
+      qrLinx:
+        $ref: "#/definitions/inline_response_200_23_qrLinx"
+      xmlSefaz:
+        type: "string"
+        description: "XML do documento fiscal enviado a Sefaz (Somente quando integrado\
+          \ com HGF Pay)"
+    example:
+      taxReceiptContingency: "taxReceiptContingency"
+      invoiceReceiptSign: "invoiceReceiptSign"
+      invoiceReceiptSignature: "invoiceReceiptSignature"
+      saleId: 0
+      invoiceReceiptAdditional: "invoiceReceiptAdditional"
+      storeTefReceipt: "storeTefReceipt"
+      customerTefReceipt: "customerTefReceipt"
+      invoiceReceiptCopies: 6
+      taxReceipt: "taxReceipt"
+      customTefReceipts:
+      - "customTefReceipts"
+      - "customTefReceipts"
+      invoiceReceipt: "invoiceReceipt"
+      qrCode: "qrCode"
+      qrLinx:
+        storeReceipt: "storeReceipt"
+        customerReceipt: "customerReceipt"
+      xmlSefaz: "xmlSefaz"
+      infoAdditional: "infoAdditional"
+      barcode: "barcode"
+      cashReceipt: "cashReceipt"
+  login:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        description: "Nome do usuário"
+      password:
+        type: "string"
+        description: "Senha de acesso do usuário"
+      rfid:
+        type: "string"
+        description: "Cartão RFID do usuário"
+      reasonCancel:
+        type: "string"
+        description: "Motivo de cancelamento da venda"
+  inline_response_200_24_tef:
+    type: "object"
+    properties:
+      value:
+        type: "number"
+        description: "Valor da transação"
+      nsuNumber:
+        type: "string"
+        description: "Número do NSU da transação (NSU)"
+      nsuAuthorizer:
+        type: "string"
+        description: "Número do NSU do autorizador da transação (NSURede)"
+      authorizationCode:
+        type: "string"
+        description: "Código de autenticação da transação (CodigoAutorizacao)"
+      transactionId:
+        type: "string"
+        description: "ID da transação (Apenas CIELO)"
+      datetime:
+        type: "string"
+        description: "Data e hora da transação (DataFiscal + HoraFiscal)"
+    description: "Dados da transação TEF"
+    example:
+      datetime: "datetime"
+      authorizationCode: "authorizationCode"
+      nsuAuthorizer: "nsuAuthorizer"
+      nsuNumber: "nsuNumber"
+      value: 0.80082819046101150206595775671303272247314453125
+      transactionId: "transactionId"
+  inline_response_200_24_payments:
+    type: "object"
+    properties:
+      tef:
+        $ref: "#/definitions/inline_response_200_24_tef"
+    description: "Lista de pagamentos TEF"
+    example:
+      tef:
+        datetime: "datetime"
+        authorizationCode: "authorizationCode"
+        nsuAuthorizer: "nsuAuthorizer"
+        nsuNumber: "nsuNumber"
+        value: 0.80082819046101150206595775671303272247314453125
+        transactionId: "transactionId"
+  inline_response_200_24:
+    type: "object"
+    properties:
+      saleId:
+        type: "string"
+        description: "Id da venda"
+      state:
+        type: "string"
+        description: "Situação da venda"
+      payments:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_24_payments"
+    example:
+      saleId: "saleId"
+      payments:
+      - tef:
+          datetime: "datetime"
+          authorizationCode: "authorizationCode"
+          nsuAuthorizer: "nsuAuthorizer"
+          nsuNumber: "nsuNumber"
+          value: 0.80082819046101150206595775671303272247314453125
+          transactionId: "transactionId"
+      - tef:
+          datetime: "datetime"
+          authorizationCode: "authorizationCode"
+          nsuAuthorizer: "nsuAuthorizer"
+          nsuNumber: "nsuNumber"
+          value: 0.80082819046101150206595775671303272247314453125
+          transactionId: "transactionId"
+      state: "state"
+  data_12:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id da forma de pagamento"
+      qrLinx:
+        type: "object"
+        description: "Dados da transação QRLinx PIX"
+        properties: {}
+  inline_response_200_25_qrLinx:
+    type: "object"
+    properties:
+      storeReceipt:
+        type: "string"
+        description: "Comprovante de pagamento (via do estabelecimento)"
+      customerReceipt:
+        type: "string"
+        description: "Comprovante de pagamento (via do cliente)"
+    description: "Dados do pagamento QRLinx PIX"
+    example:
+      storeReceipt: "storeReceipt"
+      customerReceipt: "customerReceipt"
+  inline_response_200_25:
+    type: "object"
+    properties:
+      qrLinx:
+        $ref: "#/definitions/inline_response_200_25_qrLinx"
+    example:
+      qrLinx:
+        storeReceipt: "storeReceipt"
+        customerReceipt: "customerReceipt"
+  inline_response_200_26_backoffice:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do backoffice (1-AutoSystem 4-Seller 5-EMSys 6-PostoPop 7-Posto\
+          \ Fácil)"
+      name:
+        type: "string"
+        description: "Nome do backoffice e versão"
+      phone:
+        type: "string"
+        description: "Número de telefone para suporte"
+    description: "Dados do backoffice"
+    example:
+      phone: "phone"
+      name: "name"
+      id: 5
+  inline_response_200_26_franchise:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id da franquia (1-Branca 2-Ipiranga 3-Raizen 4-Ale 5-Petrobras)"
+      name:
+        type: "string"
+        description: "Nome da franquia"
+      showLoyaltyLogo:
+        type: "boolean"
+        description: "Indica se deve exibir o logotipo do programa de fidelidade (KMV-Ipiranga\
+          \ Premmia-Petrobras)"
+    description: "Dados da franquia"
+    example:
+      showLoyaltyLogo: true
+      name: "name"
+      id: 2
+  inline_response_200_26_withdrawals:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id da sangria"
+      name:
+        type: "string"
+        description: "Nome da forma de sangria"
+    description: "Dados da forma de sangria"
+    example:
+      name: "name"
+      id: 7
+  inline_response_200_26:
+    type: "object"
+    properties:
+      showProducts:
+        type: "boolean"
+        description: "Indica se deve exibir os produtos"
+      showFuelPumps:
+        type: "boolean"
+        description: "Indica se deve exibir os bicos de abastecimento"
+      requestSalesman:
+        type: "boolean"
+        description: "Indica se deve solicitar o vendedor"
+      requestLogin:
+        type: "boolean"
+        description: "Indica se deve solicitar o login"
+      checkItemInventory:
+        type: "boolean"
+        description: "Indica se deve validar estoque ao lançar o item no carrinho"
+      voucherPostoAki:
+        type: "boolean"
+        description: "Indica se deve solicitar o código do voucher PostoAki"
+      useRfidCard:
+        type: "integer"
+        description: "Modo cartão RFID (0-Inativo 1-Ativo 2-Ativo e obrigatório)"
+      groupedUserMode:
+        type: "integer"
+        description: "Modo de agrupamento por usuário (0-Não agrupado 1-Agrupado 2-Agrupado\
+          \ com senha)"
+      shiftWorkMode:
+        type: "integer"
+        description: "Modo de abertura/fechamento do turno (1-Automático 2-Manual\
+          \ pelo PDV 3-Manual pelo POS)"
+      closeReportPrintMode:
+        type: "integer"
+        description: "Modo de impressão do relatório de fechamento (1-Sem impressã\
+          o 2-Questiona impressão 3-Impressão automática)"
+      isPafEcf:
+        type: "boolean"
+        description: "Indica se deve operar com PAF-ECF (Programa Aplicativo Fiscal\
+          \ com Emissor de Cupom Fiscal)"
+      codeActive:
+        type: "string"
+        description: "Código de Ativação (Código para ativar SDK Stone)"
+      setLayoutColumns:
+        type: "boolean"
+        description: "Indica se pode especificar a quantidade de colunas para impressã\
+          o"
+      loyalty:
+        type: "boolean"
+        description: "Indica se o programa de fidelidade para pontuação está ativado"
+      replaceNotApprovedPayment:
+        type: "boolean"
+        description: "Indica se pode substituir os pagamentos não aprovados (Sempre\
+          \ enviar True)"
+      backoffice:
+        $ref: "#/definitions/inline_response_200_26_backoffice"
+      franchise:
+        $ref: "#/definitions/inline_response_200_26_franchise"
+      payments:
+        type: "array"
+        description: "Lista de formas de pagamento"
+        items:
+          $ref: "#/definitions/inline_response_200_16"
+      withdrawals:
+        type: "array"
+        description: "Lista de formas de sangria"
+        items:
+          $ref: "#/definitions/inline_response_200_26_withdrawals"
+      voucherSuperApp:
+        type: "object"
+        description: "Configuração do voucher SuperAPP"
+        properties: {}
+    example:
+      codeActive: "codeActive"
+      showProducts: true
+      franchise:
+        showLoyaltyLogo: true
+        name: "name"
+        id: 2
+      closeReportPrintMode: 5
+      checkItemInventory: true
+      loyalty: true
+      payments:
+      - creditCheck: true
+        name: "name"
+        id: 6
+        dtef: 0
+      - creditCheck: true
+        name: "name"
+        id: 6
+        dtef: 0
+      groupedUserMode: 6
+      showFuelPumps: true
+      useRfidCard: 0
+      isPafEcf: true
+      withdrawals:
+      - name: "name"
+        id: 7
+      - name: "name"
+        id: 7
+      voucherSuperApp: "{}"
+      setLayoutColumns: true
+      shiftWorkMode: 1
+      backoffice:
+        phone: "phone"
+        name: "name"
+        id: 5
+      requestSalesman: true
+      requestLogin: true
+      voucherPostoAki: true
+      replaceNotApprovedPayment: true
+  v1shellboxorder_items:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Descrição do produto"
+      barcode:
+        type: "string"
+        description: "Código de barras utilizado na venda"
+      quantity:
+        type: "number"
+        description: "Quantidade vendida"
+      unit:
+        type: "string"
+        description: "Unidade de medida"
+      unitPrice:
+        type: "integer"
+        description: "Preço unitário do item (em centavos)"
+      discount:
+        type: "integer"
+        description: "Desconto do item (em centavos)"
+      addition:
+        type: "integer"
+        description: "Acréscimo do item (em centavos)"
+      netPrice:
+        type: "integer"
+        description: "Total do item (em centados) / ((Quantidade x Preço Unitário)\
+          \ - Desconto + Acréscimo)"
+      totalPrice:
+        type: "integer"
+        description: "Total do item (em centados) / Quantidade x Preço Unitário"
+    description: "Item da venda ShellBox"
+  data_13:
+    type: "object"
+    properties:
+      storeId:
+        type: "string"
+        description: "Id da loja (Código IBM)"
+      posId:
+        type: "string"
+        description: "Id do PDV (Nome da estação)"
+      partnerOrderId:
+        type: "string"
+        description: "Id do pedido (formato UUID4 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)"
+      partnerReference:
+        type: "string"
+        description: "Qualquer informação de referência pertinente ao parceiro"
+      type:
+        type: "array"
+        description: "Tipos de produtos (fuel, select)"
+        items:
+          type: "string"
+      paymentMethod:
+        type: "array"
+        description: "Métodos de pagamento (Cash, CreditCard, ShellBox)"
+        items:
+          type: "string"
+      total:
+        type: "integer"
+        description: "Total da venda (em centavos)"
+      discount:
+        type: "integer"
+        description: "Desconto da venda (em centavos)"
+      addition:
+        type: "integer"
+        description: "Acréscimo da venda (em centavos)"
+      paymentAmount:
+        type: "integer"
+        description: "Total pago com ShellBox (em centavos)"
+      orderId:
+        type: "string"
+        description: "Id do pedido (Não precisa ser enviado ao criar o pedido / formato\
+          \ UUID4 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)"
+      items:
+        type: "array"
+        description: "Itens da venda"
+        items:
+          $ref: "#/definitions/v1shellboxorder_items"
+    description: "Dados do pagamento ShellBox"
+  inline_response_200_27:
+    type: "object"
+    properties:
+      saleId:
+        type: "string"
+        description: "Id da venda"
+      orderId:
+        type: "string"
+        description: "Id do pedido ShellBox"
+  data_14:
+    type: "object"
+    properties:
+      orderId:
+        type: "string"
+        description: "Id do pedido Shell Box (formato UUID4 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)"
+  inline_response_200_28:
+    type: "object"
+    properties:
+      saleId:
+        type: "string"
+        description: "Id da venda"
+      state:
+        type: "string"
+        description: "Situação da venda"
+  inline_response_200_29:
+    type: "object"
+    properties:
+      state:
+        type: "string"
+        description: "Situação do pagamento (success ou failed)"
+      message:
+        type: "string"
+        description: "Mensagem que será apresentada ao operador de caixa em caso de\
+          \ pagamento não autorizado, falha ou erro"
+  data_15:
+    type: "object"
+    properties:
+      state:
+        type: "string"
+        description: "Situação do pagamento (success ou failed)"
+      message:
+        type: "string"
+        description: "Mensagem que será apresentada ao operador de caixa em caso de\
+          \ pagamento não autorizado, falha ou erro"
+  inline_response_200_30:
+    type: "object"
+    properties:
+      saleId:
+        type: "string"
+        description: "Id da venda"
+  inline_response_200_31_warehouses:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        description: "Id do depósito"
+      code:
+        type: "string"
+        description: "Código do depósito"
+      name:
+        type: "string"
+        description: "Descrição do depósito"
+    description: "Dados do depósito"
+  inline_response_200_31:
+    type: "object"
+    properties:
+      warehouses:
+        type: "array"
+        items:
+          $ref: "#/definitions/inline_response_200_31_warehouses"
+      nextPage:
+        type: "integer"
+        description: "Número da próxima página (Nulo se não houver próxima página)"
+      prevPage:
+        type: "integer"
+        description: "Número da página anterior (Nulo se não houver página anterior)"
+    description: "Lista de depósitos"
+parameters:
+  POSToken:
+    name: "POS-Token"
+    in: "header"
+    description: "Token de autenticação gerado pelo backoffice"
+    required: true
+    type: "string"
+  APIToken:
+    name: "Authorization"
+    in: "header"
+    description: "Token de autorização da API gerado pelo hub de serviços (Em rede\
+      \ local gerado pelo backoffice)"
+    required: true
+    type: "string"
+  StoreCNPJ:
+    name: "Store-CNPJ"
+    in: "header"
+    description: "CNPJ da empresa (somente digitos)"
+    required: true
+    type: "string"
+  DeviceNumber:
+    name: "Device-Number"
+    in: "header"
+    description: "Número serial do dispositivo"
+    required: true
+    type: "string"
+  APKVersion:
+    name: "APK-Version"
+    in: "header"
+    description: "Número da versão do aplicativo"
+    required: false
+    type: "string"
+  RFIDAvailable:
+    name: "RFID-Available"
+    in: "header"
+    description: "Indica se o dispositivo faz leitura de cartão RFID"
+    required: false
+    type: "boolean"
+responses:
+  BadRequest:
+    description: "Requisição com sintaxe inválida"
+    schema:
+      $ref: "#/definitions/Error"
+  Conflict:
+    description: "Existe uma sessão já iniciada ou conflitante com a tentativa corrente"
+    schema:
+      $ref: "#/definitions/Error"
+  Unauthenticated:
+    description: "Recurso solicitado requer autenticação"
+    schema:
+      $ref: "#/definitions/Error"
+  Forbidden:
+    description: "Sem permissão para acesso ao conteúdo"
+    schema:
+      $ref: "#/definitions/Error"
+  NotFound:
+    description: "Recurso solicitado não encontrado"
+    schema:
+      $ref: "#/definitions/Error"
+  MethodNotAllowed:
+    description: "Método da requisição não permitido"
+    schema:
+      $ref: "#/definitions/Error"
+  UnsupportedMediaType:
+    description: "Formato do conteúdo de dados não suportado"
+    schema:
+      $ref: "#/definitions/Error"
+  InternalServerError:
+    description: "Erro interno no servidor"
+    schema:
+      $ref: "#/definitions/Error"
